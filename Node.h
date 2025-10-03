@@ -4,13 +4,15 @@ using namespace std;
 
 template<typename T>
 struct Node {
-    T value;                // Dato almacenado en el nodo
+    T value;           // Dato almacenado en el nodo
     Node* next;       // Puntero al siguiente nodo
+    Node* prev;
 
     // Constructor: inicializa el dato y el puntero siguiente a nullptr
     Node(const T d){
         value = d;
         next = nullptr;
+        prev = nullptr;
     }
 };
 
