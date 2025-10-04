@@ -100,6 +100,95 @@ public:
         length--;
     }
 
+    //Función auxiliar para encontrar la mitad de la lista
+    void splitList(Node<T>* headRef, Node<T>** secondRef) {
+        // Puntero lento (slow) avanza 1, puntero rápido (fast) avanza 2.
+        Node<T>* slow = headRef;
+        Node<T>* fast = headRef->next;
+
+        // Fast se mueve dos pasos, slow se mueve uno, hasta que fast llega al final.
+        while (fast != nullptr) {
+            fast = fast->next;
+            if (fast != nullptr) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+        }
+
+        // slow es el último nodo de la primera mitad.
+        *secondRef = slow->next;
+
+        // Cortar el enlace entre las dos mitades.
+        if (*secondRef != nullptr) {
+            (*secondRef)->prev = nullptr;
+        }
+        slow->next = nullptr;
+    }
+
+    // Función auxiliar para mergeSort
+    Node<T>* merge(Node<T>* left, Node<T>* right) {
+        // Caso base: si una lista está vacía, devuelve la otra.
+        if (left == nullptr) return right;
+        if (right == nullptr) return left;
+
+        // La comparación se basa en el operador sobrecargado de Register (por IP).
+        // Se ordena ascendentemente por IP (menor a mayor).
+        if (left->value <= right->value) {
+            // El nodo izquierdo es el nuevo head de la lista combinada.
+            left->next = merge(left->next, right);
+            left->next->prev = left; // Ajusta el puntero 'prev' del nodo siguiente.
+            left->prev = nullptr;    // Asegura que el nuevo head no tenga prev.
+            return left;
+        } else {
+            // El nodo derecho es el nuevo head de la lista combinada.
+            right->next = merge(left, right->next);
+            right->next->prev = right; // Ajusta el puntero 'prev' del nodo siguiente.
+            right->prev = nullptr;     // Asegura que el nuevo head no tenga prev.
+            return right;
+        }
+    }
+
+    // Es la función recursiva que se usa durante el proceso de ordenamiento
+    void mergeSortRecursive(Node<T>** headRef) {
+        Node<T>* head = *headRef;
+        Node<T>* a; // Primera mitad
+        Node<T>* b; // Segunda mitad
+
+        // Caso base: 0 o 1 nodo. La lista ya está ordenada.
+        if (head == nullptr || head->next == nullptr) {
+            return;
+        }
+
+        // 1. Dividir la lista en 'a' y 'b'.
+        a = head;
+        splitList(a, &b);
+
+        // 2. Llamada recursiva para ordenar las mitades.
+        mergeSortRecursive(&a);
+        mergeSortRecursive(&b);
+
+        // 3. Fusionar las dos listas ordenadas y actualizar el head.
+        *headRef = merge(a, b);
+    }
+
+
+    // Verifica condiciones previas y actualiza después de ordenar
+    void mergeSort() {
+        // Si la lista está vacía o tiene un solo elemento, no hacemos nada.
+        if (head == nullptr || head->next == nullptr) {
+            return;
+        }
+
+        // Llamar a la función recursiva y actualizar el head y tail.
+        mergeSortRecursive(&head);
+
+        // 4. Actualizar el puntero 'tail' después de que la lista esté completamente fusionada.
+        Node<T>* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        tail = current;
+    }
 };
 
 template <typename T>
