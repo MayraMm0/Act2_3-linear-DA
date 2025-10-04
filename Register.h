@@ -18,7 +18,7 @@ class Register {
     ~Register() = default;
 
     // Getters
-    string get_iP();
+    string get_iP() const;
     string get_falla() const;
     string get_fecha() const;
 
@@ -34,4 +34,8 @@ class Register {
     bool operator<=(const Register& R1) const;
     bool operator>=(const Register& R1) const;
 
+    // Declaración del operador de inserción de flujo
+    friend std::ostream& operator<<(std::ostream& os, const Register& reg);
+
 };
+

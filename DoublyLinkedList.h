@@ -197,7 +197,7 @@ ostream& operator<<(ostream& os, const DoublyLinkedList<T>& lista){
     Node<T>* temp = lista.head;
     // Recorre la lista e imprime cada dato
     while(temp){
-        os << temp -> value<<" <-> ";
+        os << temp -> value<<" <-> \n";
         temp = temp -> next;
     }
     os << "nullptr"; // Marca el final de la lista

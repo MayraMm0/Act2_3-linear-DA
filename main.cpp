@@ -7,15 +7,28 @@
 using namespace std;
 
 int main() {
-    DoublyLinkedList<int> list;
-    list.insertBack(10);
-    list.insertBack(5);
-    list.insertFront(20);
-    list.insertFront(30);
-    cout << "La longitud de la lista es: " << list.getLength() << endl;
-    cout << "Elementos en la lista: ";
-    cout << list << endl;
+    DoublyLinkedList<Register> list;
+    // Registros de ejemplo como strings
+    string registros_raw[] = {
+        "Oct 9 10:32:24 423.2.230.77:6166 Failed password for illegal user guest",
+        "Aug 28 23:07:49 897.53.984.6:6710 Failed password for root",
+        "Aug 4 03:18:56 960.96.3.29:5268 Failed password for admin",
+        "Jun 20 13:39:21 118.15.416.57:4486 Failed password for illegal user guest",
+        "Jun 2 18:37:41 108.57.27.85:5491 Failed password for illegal user guest",
+        "Oct 1 07:22:46 450.25.888.72:5978 Illegal user"
+    };
+    cout << "--- Insertando Registros Originales ---" << endl;
+    for (const string& linea : registros_raw){
+        Register nuevo_registro = Register::fromLinea(linea);
+        list.insertBack(nuevo_registro); // Asume que tienes este método
+    }
+
+    cout << "\n--- Ordenando la Lista por IP ---" << endl;
     list.mergeSort();
-    cout << "Lista ordenada" << list <<endl;
+    cout << "\nLista ordenada: " << endl;
+    cout << list << endl;
+
+    cout << "La longitud de la lista es: " << list.getLength() << endl;
+
     return 0;
 }

@@ -14,7 +14,7 @@ Register::Register(IP _ip, string _falla, string _fecha){
 
 // Getters
 
-string Register::get_iP(){
+string Register::get_iP() const{
     return ip.original();
 }
 
@@ -52,7 +52,7 @@ Register Register::fromLinea(const std::string& linea){
     iss >> mesStr >> dia >> horaStr >> iP;
 
     // Convierte fecha y hora en uno solo
-    std::string fecha = mesStr + dia + horaStr;
+    std::string fecha = mesStr +" "+ dia +" "+ horaStr;
 
     // Leer el mensaje de falla
     getline(iss, falla);
@@ -72,4 +72,17 @@ bool Register::operator<=(const Register& R1) const{
 
 bool Register::operator>=(const Register& R1) const{
     return ip >= R1.ip;
+}
+
+// Implementación del operador de inserción de flujo
+std::ostream& operator<<(std::ostream& os, const Register& reg) {
+    // Aquí defines el formato de salida. Por ejemplo:
+    os << "[" << reg.get_fecha() << " "
+       << reg.get_iP() << " - "
+       << reg.get_falla() << "]";
+
+    // Si la clase IP también tiene su propio operator<<, úsalo:
+    // os << "[" << reg.get_fecha() << " " << reg.ip << " - " << reg.get_falla() << "]";
+
+    return os;
 }
