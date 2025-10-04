@@ -12,23 +12,17 @@ Register::Register(IP _ip, string _falla, string _fecha){
     fecha = _fecha;
 }
 
-~Register(){
-    ip = IP();
-    falla = "";
-    fecha = "";
-}
-
 // Getters
 
 string Register::get_iP(){
     return ip.original();
 }
 
-string Register::get_falla(){
+string Register::get_falla() const{
     return falla;
 }
 
-string Register::get_fecha(){
+string Register::get_fecha() const{
     return fecha;
 }
 

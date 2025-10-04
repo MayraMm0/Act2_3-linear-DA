@@ -25,7 +25,7 @@ class Register {
     // Setters
     void set_iP(string _iP);
     void set_falla(string _falla);
-    void set_fechaHora(string _fecha);
+    void set_fecha(string _fecha);
 
     // Métodos estáticos
     static Register fromLinea(const string& linea);
