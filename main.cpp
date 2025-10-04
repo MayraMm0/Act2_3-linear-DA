@@ -7,7 +7,6 @@ using std::cin;
 using std::string;
 
 int main() {
-    // Tu código de prueba para DoublyLinkedList aquí
     DoublyLinkedList<int> list;
     list.insertBack(10);
     list.insertBack(20);
