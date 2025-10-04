@@ -4,7 +4,7 @@ using namespace std;
 
 class IP {
 public:
-    IP() = default;                    // IP sin datos iniciales.
+    IP();                    // IP sin datos iniciales.
     IP(const string& text);            // Construye la IP a partir del texto.
 
     unsigned int value() const;        // Regresa la IP convertido como entero.

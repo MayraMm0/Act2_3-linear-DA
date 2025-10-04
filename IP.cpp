@@ -1,6 +1,6 @@
 #include "IP.h"
 
-IP::IP() : ipValue_(0), port_(0) {}
+IP::IP(): ipValue_(0), port_(0) {}
 
 IP::IP(const string& text) : ipValue_(0), port_(0) {
     parse(text);

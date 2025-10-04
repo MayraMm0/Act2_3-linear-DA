@@ -1,10 +1,10 @@
 #include "Node.h"
 #include "DoublyLinkedList.h"
+#include "LogManager.h"
+#include "Register.h"
+#include "IP.h"
 #include<iostream>
-using std::cout;
-using std::endl;
-using std::cin;
-using std::string;
+using namespace std;
 
 int main() {
     DoublyLinkedList<int> list;

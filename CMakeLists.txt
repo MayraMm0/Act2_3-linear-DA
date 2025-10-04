@@ -7,5 +7,8 @@ include_directories(.)
 
 add_executable(Act2_3_linear_DA
         main.cpp
+        IP.cpp
+        LogManager.cpp
+        Register.cpp
 )
 
