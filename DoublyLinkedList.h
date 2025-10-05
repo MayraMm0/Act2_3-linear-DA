@@ -131,21 +131,44 @@ public:
         if (left == nullptr) return right;
         if (right == nullptr) return left;
 
-        // La comparación se basa en el operador sobrecargado de Register (por IP).
-        // Se ordena ascendentemente por IP (menor a mayor).
-        if (left->value <= right->value) {
-            // El nodo izquierdo es el nuevo head de la lista combinada.
-            left->next = merge(left->next, right);
-            left->next->prev = left; // Ajusta el puntero 'prev' del nodo siguiente.
-            left->prev = nullptr;    // Asegura que el nuevo head no tenga prev.
-            return left;
+        // Determina el nodo que será el head de la lista resultante
+        Node<T>* result = nullptr;
+        if (left->value <= right->value) { // Usa el operador de Register (IP)
+            result = left;
+            left = left->next;
         } else {
-            // El nodo derecho es el nuevo head de la lista combinada.
-            right->next = merge(left, right->next);
-            right->next->prev = right; // Ajusta el puntero 'prev' del nodo siguiente.
-            right->prev = nullptr;     // Asegura que el nuevo head no tenga prev.
-            return right;
+            result = right;
+            right = right->next;
         }
+
+        Node<T>* temp = result; // Puntero auxiliar para construir la lista
+        // Fusiona las sublistas
+        while (left && right){
+            if (left->value <= right->value) {
+                temp->next = left;
+                left->prev = temp; // Se actualiza el puntero 'prev'
+                temp = left;
+                left = left->next;
+            } else {
+                temp->next = right;
+                right->prev = temp; // Se actualiza el puntero 'prev'
+                temp = right;
+                right = right->next;
+            }
+        }
+
+        // Copia los nodos restantes (solo uno será no-nulo)
+        if (left != nullptr) {
+            temp->next = left;
+            left->prev = temp;
+        } else if (right != nullptr) {
+            temp->next = right;
+            right->prev = temp;
+        }
+
+        // El puntero 'prev' del 'result' debe ser nullptr al final de la fusión
+        result->prev = nullptr;
+        return result;
     }
 
     // Es la función recursiva que se usa durante el proceso de ordenamiento

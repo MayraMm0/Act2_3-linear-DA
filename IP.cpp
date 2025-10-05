@@ -1,5 +1,6 @@
 #include "IP.h"
 
+//Probar
 IP::IP(): ipValue_(0), port_(0) {}
 
 IP::IP(const string& text) : ipValue_(0), port_(0) {
@@ -80,7 +81,16 @@ void IP::parse(const string& text) {
             break;
         }
 
-        parts[index] = static_cast<unsigned int>(stoi(piece));
+        unsigned int octet = 0;
+        try {
+            octet = static_cast<unsigned int>(stoi(piece));
+        } catch (const std::invalid_argument& e) {
+            // Manejo si stoi falla (no es un número).
+            hasFourParts = false;
+            break;
+        }
+
+        parts[index] = octet;
     }
 
     // Combina los cuatro bloques en un entero de 32 bits
@@ -89,6 +99,7 @@ void IP::parse(const string& text) {
         const unsigned int SHIFT_TWO = 16;
         const unsigned int SHIFT_THREE = 8;
 
+        //// La IP se convierte a un solo número, preservando el orden numérico.
         ipValue_ = (parts[0] << SHIFT_ONE) |
                    (parts[1] << SHIFT_TWO) |
                    (parts[2] << SHIFT_THREE) |

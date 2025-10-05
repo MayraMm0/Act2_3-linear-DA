@@ -19,6 +19,7 @@ class Register {
 
     // Getters
     string get_iP() const;
+    IP getIP() const { return ip; };
     string get_falla() const;
     string get_fecha() const;
 

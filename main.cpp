@@ -1,8 +1,6 @@
-#include "Node.h"
 #include "DoublyLinkedList.h"
 #include "LogManager.h"
 #include "Register.h"
-#include "IP.h"
 #include<iostream>
 using namespace std;
 
