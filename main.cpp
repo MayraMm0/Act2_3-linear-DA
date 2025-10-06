@@ -1,32 +1,81 @@
 #include "DoublyLinkedList.h"
 #include "LogManager.h"
 #include "Register.h"
-#include<iostream>
+#include <iostream>
+#include <fstream>
 using namespace std;
 
 int main() {
-    DoublyLinkedList<Register> list;
-    // Registros de ejemplo como strings
-    string registros_raw[] = {
-        "Oct 9 10:32:24 423.2.230.77:6166 Failed password for illegal user guest",
-        "Aug 28 23:07:49 897.53.984.6:6710 Failed password for root",
-        "Aug 4 03:18:56 960.96.3.29:5268 Failed password for admin",
-        "Jun 20 13:39:21 118.15.416.57:4486 Failed password for illegal user guest",
-        "Jun 2 18:37:41 108.57.27.85:5491 Failed password for illegal user guest",
-        "Oct 1 07:22:46 450.25.888.72:5978 Illegal user"
-    };
-    cout << "--- Insertando Registros Originales ---" << endl;
-    for (const string& linea : registros_raw){
-        Register nuevo_registro = Register::fromLinea(linea);
-        list.insertBack(nuevo_registro); // Asume que tienes este método
+    cout << "=== SISTEMA DE GESTION DE LOGS DE SEGURIDAD ===" << endl;
+    cout << "Iniciando lectura y procesamiento de logs..." << endl << endl;
+    
+    LogManager manager;
+    int registrosLeidos = 0;
+
+    // 1. Leer archivo de logs
+    cout << "1. Leyendo archivo bitacora.txt..." << endl;
+    ifstream file("bitacora.txt");
+    if (!file.is_open()) {
+        cout << "ERROR: No se pudo abrir el archivo bitacora.txt" << endl;
+        return 1;
     }
+    string line;
+    while (getline(file, line)) {
+        if (!line.empty()) {
+            Register reg = Register::fromLinea(line);
+            manager.addRegister(reg);
+            registrosLeidos++;
+        }
+    }
+    file.close();
+    cout << "   Total de registros leidos: " << registrosLeidos << endl << endl;
 
-    cout << "\n--- Ordenando la Lista por IP ---" << endl;
-    list.mergeSort();
-    cout << "\nLista ordenada: " << endl;
-    cout << list << endl;
+    // 2. Ordenar por IP
+    cout << "2. Ordenando registros por IP usando Merge Sort..." << endl;
+    manager.sortLogs();
+    cout << "   Ordenamiento completado." << endl << endl;
 
-    cout << "La longitud de la lista es: " << list.getLength() << endl;
+    // 3. Guardar lista ordenada en archivo
+    cout << "3. Guardando lista ordenada en 'Registros_ordenados.txt'..." << endl;
+    ofstream archivoOrdenados("Registros_ordenados.txt");
+    if (archivoOrdenados.is_open()) {
+        Node<Register>* temp = manager.lookupRange("0.0.0.0", "999.999.999.999").getHead();
+        while (temp) {
+            archivoOrdenados << temp->value << endl;
+            temp = temp->next;
+        }
+        archivoOrdenados.close();
+        cout << "   Lista ordenada guardada exitosamente." << endl;
+    } else {
+        cout << "   ERROR: No se pudo crear 'Registros_ordenados.txt'" << endl;
+    }
+    cout << endl;
 
+    // 4. Búsqueda por rango de IPs
+    cout << "4. Busqueda por rango de IPs:" << endl;
+    string startIP, endIP;
+    cout << "   Ingresa la IP de inicio del rango: ";
+    getline(cin, startIP);
+    cout << "   Ingresa la IP de fin del rango: ";
+    getline(cin, endIP);
+    DoublyLinkedList<Register> results = manager.lookupRange(startIP, endIP);
+    cout << "   Registros encontrados: " << results.getLength() << endl;
+    cout << endl;
+
+    // 5. Guardar resultados de búsqueda en archivo
+    cout << "5. Guardando resultados de busqueda en 'Busqueda_resultados.txt'..." << endl;
+    ofstream archivoBusqueda("Busqueda_resultados.txt");
+    if (archivoBusqueda.is_open()) {
+        Node<Register>* temp = results.getHead();
+        while (temp) {
+            archivoBusqueda << temp->value << endl;
+            temp = temp->next;
+        }
+        archivoBusqueda.close();
+        cout << "   Resultados de busqueda guardados exitosamente." << endl;
+    } else {
+        cout << "   ERROR: No se pudo crear 'Busqueda_resultados.txt'" << endl;
+    }
+    cout << endl;
     return 0;
 }
