@@ -1,15 +1,37 @@
 #include "LogManager.h"
 
-DoublyLinkedList<Register> lookupRange(DoublyLinkedList<Register>& list, const std::string& startIP, const std::string& endIP) {
+LogManager::LogManager() {}
+
+void LogManager::addRegister(const Register& reg) {
+    logs.insertBack(reg);
+}
+
+void LogManager::sortLogs() {
+    logs.mergeSort();
+}
+
+void LogManager::displayAllLogs() {
+    Node<Register>* temp = logs.getHead();
+    int count = 1;
+    
+    while (temp) {
+        cout << "   " << count << ". " << temp->value << endl;
+        temp = temp->next;
+        count++;
+    }
+}
+
+DoublyLinkedList<Register> LogManager::lookupRange(const std::string& startIP, const std::string& endIP) {
     IP start(startIP);
     IP end(endIP);
 
     DoublyLinkedList<Register> result;
-    Node<Register>* temp = list.getHead();
+    Node<Register>* temp = logs.getHead();
 
     while (temp) {
-        unsigned int regIPValue = temp->value.getIP().value(); // Access numeric IP value
-        if (regIPValue >= start.value() && regIPValue <= end.value()) {
+        IP tempIP = temp->value.getIP();
+        // Si tempIP está en el rango [start, end]
+        if (!(tempIP < start) && !(end < tempIP)) {
             result.insertBack(temp->value);
         }
         temp = temp->next;

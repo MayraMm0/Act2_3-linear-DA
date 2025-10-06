@@ -10,7 +10,12 @@ private:
     DoublyLinkedList<Register> logs;
 
 public:
-    LogManager() = default;
+    LogManager();
     ~LogManager() = default;
-    void lookupRange(DoublyLinkedList<Register>& list, const string& startIP, const string& endIP);
+    
+    // Métodos para manejo de logs
+    void addRegister(const Register& reg);
+    void sortLogs();
+    void displayAllLogs();
+    DoublyLinkedList<Register> lookupRange(const string& startIP, const string& endIP);
 };
