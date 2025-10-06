@@ -3,11 +3,11 @@
 
 //Probar
 IP::IP() : port_(0) {
-    for (int i = 0; i < 4; ++i) octets_[i] = 0;
+    for (unsigned int & octet : octets_) octet = 0;
 }
 
 IP::IP(const string& text) : port_(0) {
-    for (int i = 0; i < 4; ++i) octets_[i] = 0;
+    for (unsigned int & octet : octets_) octet = 0;
     parse(text);
 }
 

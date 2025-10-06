@@ -3,14 +3,14 @@
 #include <string>
 #include "Register.h"
 #include "DoublyLinkedList.h"
-#include "IP.h"
+
 
 class LogManager {
 private: 
     DoublyLinkedList<Register> logs;
 
 public:
-    LogManager();
+    LogManager() = default;
     ~LogManager() = default;
     
     // Métodos para manejo de logs

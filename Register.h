@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include "DoublyLinkedList.h"
 #include "IP.h"
 using namespace std;
 
@@ -24,9 +23,9 @@ class Register {
     string get_fecha() const;
 
     // Setters
-    void set_iP(string _iP);
-    void set_falla(string _falla);
-    void set_fecha(string _fecha);
+    void set_iP(const string& _iP);
+    void set_falla(const string& _falla);
+    void set_fecha(const string& _fecha);
 
     // Métodos estáticos
     static Register fromLinea(const string& linea);

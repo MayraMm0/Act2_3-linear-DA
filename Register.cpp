@@ -4,7 +4,7 @@
 
 // Constructores 
 
-Register::Register(): ip(IP()), falla(""), fecha(""){}
+Register::Register(): ip(IP()), falla(" "), fecha(" "){}
 
 Register::Register(IP _ip, string _falla, string _fecha){
     ip = _ip;
@@ -32,15 +32,15 @@ string Register::get_fecha() const{
 
 // Setters
 
-void Register::set_iP(string _iP){
+void Register::set_iP(const string& _iP){
     ip = _iP;
 }
 
-void Register::set_falla(string _falla){
+void Register::set_falla(const string& _falla){
     falla = _falla;
 }
 
-void Register::set_fecha(string _fecha){
+void Register::set_fecha(const string& _fecha){
     fecha = _fecha;
 }
 

@@ -1,7 +1,5 @@
 #include "LogManager.h"
 
-LogManager::LogManager() {}
-
 void LogManager::addRegister(const Register& reg) {
     logs.insertBack(reg);
 }
