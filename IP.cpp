@@ -1,14 +1,14 @@
 #include "IP.h"
+#include <stdexcept>
 
 //Probar
-IP::IP(): ipValue_(0), port_(0) {}
-
-IP::IP(const string& text) : ipValue_(0), port_(0) {
-    parse(text);
+IP::IP() : port_(0) {
+    for (int i = 0; i < 4; ++i) octets_[i] = 0;
 }
 
-unsigned int IP::value() const {
-    return ipValue_;
+IP::IP(const string& text) : port_(0) {
+    for (int i = 0; i < 4; ++i) octets_[i] = 0;
+    parse(text);
 }
 
 unsigned short IP::port() const {
@@ -20,30 +20,18 @@ const string& IP::original() const {
 }
 
 bool IP::operator==(const IP& rhs) const {
-    return ipValue_ == rhs.ipValue_ && port_ == rhs.port_;
-}
-
-bool IP::operator!=(const IP& rhs) const {
-    return !(*this == rhs);
+    for (int i = 0; i < 4; ++i) {
+        if (octets_[i] != rhs.octets_[i]) return false;
+    }
+    return port_ == rhs.port_;
 }
 
 bool IP::operator<(const IP& rhs) const {
-    if (ipValue_ != rhs.ipValue_) {
-        return ipValue_ < rhs.ipValue_;
+    for (int i = 0; i < 4; ++i) {
+        if (octets_[i] < rhs.octets_[i]) return true;
+        if (octets_[i] > rhs.octets_[i]) return false;
     }
     return port_ < rhs.port_;
-}
-
-bool IP::operator>(const IP& rhs) const {
-    return rhs < *this;
-}
-
-bool IP::operator<=(const IP& rhs) const {
-    return !(*this > rhs);
-}
-
-bool IP::operator>=(const IP& rhs) const {
-    return !(*this < rhs);
 }
 
 void IP::parse(const string& text) {
@@ -59,11 +47,7 @@ void IP::parse(const string& text) {
         portPart = text.substr(colonPos + 1);
     }
 
-    unsigned int parts[4] = {0, 0, 0, 0};
-    bool hasFourParts = true;
     size_t position = 0;
-
-    // Recorre cada bloque separado por '.' y lo convierte a entero
     for (int index = 0; index < 4; ++index) {
         size_t dotPos = ipPart.find('.', position);
         string piece;
@@ -76,41 +60,27 @@ void IP::parse(const string& text) {
             position = dotPos + 1;
         }
 
+        // Si el bloque está vacío, usar 0
         if (piece.empty()) {
-            hasFourParts = false;
-            break;
+            octets_[index] = 0;
+        } else {
+            unsigned int octet = 0;
+            try {
+                octet = static_cast<unsigned int>(stoi(piece));
+            } catch (const std::invalid_argument& e) {
+                octet = 0;
+            }
+            octets_[index] = octet;
         }
-
-        unsigned int octet = 0;
-        try {
-            octet = static_cast<unsigned int>(stoi(piece));
-        } catch (const std::invalid_argument& e) {
-            // Manejo si stoi falla (no es un número).
-            hasFourParts = false;
-            break;
-        }
-
-        parts[index] = octet;
-    }
-
-    // Combina los cuatro bloques en un entero de 32 bits
-    if (hasFourParts && position == ipPart.size()) {
-        const unsigned int SHIFT_ONE = 24;
-        const unsigned int SHIFT_TWO = 16;
-        const unsigned int SHIFT_THREE = 8;
-
-        //// La IP se convierte a un solo número, preservando el orden numérico.
-        ipValue_ = (parts[0] << SHIFT_ONE) |
-                   (parts[1] << SHIFT_TWO) |
-                   (parts[2] << SHIFT_THREE) |
-                   parts[3];
-    } else {
-        ipValue_ = 0;
     }
 
     // Convierte el puerto si venía en el texto; de lo contrario queda en cero
     if (!portPart.empty()) {
-        port_ = static_cast<unsigned short>(stoi(portPart));
+        try {
+            port_ = static_cast<unsigned short>(stoi(portPart));
+        } catch (const std::invalid_argument& e) {
+            port_ = 0;
+        }
     } else {
         port_ = 0;
     }
