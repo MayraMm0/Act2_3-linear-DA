@@ -1,3 +1,8 @@
+/*
+Esta clase encapsula la información de un registro de log incluyendo
+la IP, el tipo de falla y la fecha del evento.
+ */
+
 #pragma once
 #include <string>
 #include <sstream>
@@ -6,34 +11,44 @@ using namespace std;
 
 class Register {
 
-    private:
-    IP ip;
-    string falla;
-    string fecha;
+private:
+    IP ip;        ///< Dirección IP del evento
+    string falla; ///< Tipo de falla o evento de seguridad
+    string fecha; ///< Fecha y hora del evento
 
-    public:
+public:
+    // ===== CONSTRUCTORES Y DESTRUCTOR =====
     Register();
+    
     Register(IP iP, string falla, string fecha);
+
     ~Register() = default;
 
-    // Getters
+    // ===== MÉTODOS GETTER =====
+    
+    //Obtiene la IP como string
     string get_iP() const;
+    
+    //Obtiene el objeto IP
     IP getIP() const;
     string get_falla() const;
     string get_fecha() const;
 
-    // Setters
+    // ===== MÉTODOS SETTER =====
     void set_iP(const string& _iP);
     void set_falla(const string& _falla);
     void set_fecha(const string& _fecha);
 
-    // Métodos estáticos
+    // ===== MÉTODOS ESTÁTICOS =====
+
+    //Crea un registro desde una línea de texto
     static Register fromLinea(const string& linea);
 
-    // Sobrecarga operadores de comparación
+    // ===== SOBRECARGA DE OPERADORES =====
+
     bool operator<=(const Register& R1) const;
 
-    // Declaración del operador de inserción de flujo
+
     friend std::ostream& operator<<(std::ostream& os, const Register& reg);
 
 };
