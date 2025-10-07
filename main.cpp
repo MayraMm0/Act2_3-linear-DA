@@ -39,7 +39,9 @@ int main() {
     cout << "3. Guardando lista ordenada en 'Registros_ordenados.txt'..." << endl;
     ofstream archivoOrdenados("Registros_ordenados.txt");
     if (archivoOrdenados.is_open()) {
-        Node<Register>* temp = manager.lookupRange("0.0.0.0", "999.999.999.999").getHead();
+        // Guardar en archivo partiendo de una lista que viva durante el recorrido
+        DoublyLinkedList<Register> todos = manager.lookupRange("0.0.0.0", "999.999.999.999");
+        Node<Register>* temp = todos.getHead();
         while (temp) {
             archivoOrdenados << temp->value << endl;
             temp = temp->next;
