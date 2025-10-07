@@ -103,10 +103,10 @@ Operador de inserción de flujo
 Imprime el registro en formato legible
 */
 ostream& operator<<(ostream& os, const Register& reg) {
-    // Formato de salida: [fecha IP - mensaje_falla]
-    os << "[" << reg.get_fecha() << " "
+    // Formato de salida: fecha IP - mensaje_falla
+    os << reg.get_fecha() << " "
        << reg.get_iP() << " - "
-       << reg.get_falla() << "]";
+       << reg.get_falla();
 
     return os;
 }

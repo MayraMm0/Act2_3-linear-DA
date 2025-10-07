@@ -172,7 +172,6 @@ public:
     Función auxiliar para fusionar dos listas ordenadas
     Complejidad: O(n + m) donde n y m son los tamaños de las listas
     */
-     */
     Node<T>* merge(Node<T>* left, Node<T>* right) {
         // Caso base: si una lista está vacía, devuelve la otra
         if (left == nullptr) return right;
